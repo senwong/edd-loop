@@ -4,6 +4,44 @@
 
 ## 安装
 
+### 让 Agent 自动安装（推荐）
+
+把下面这段提示词粘贴到具备本机终端执行权限的 **Claude Code 或 Codex** 中。Agent 将读取仓库内容、执行安装、检查结果；无需你逐条输入命令。
+
+```text
+请帮我自动安装以下 GitHub 仓库的 Claude Code Skill：
+https://github.com/senwong/edd-loop
+
+目标：全局安装到当前用户的 ~/.claude，使 /edd-loop 和两个子 Agent 可在不同项目使用。
+
+请自己调用终端工具，按以下流程执行，不要仅输出操作说明：
+1. 检查 git、HOME、~/.claude 及当前文件权限，确认可以安装。
+2. 在安全的临时目录克隆仓库，并读取 README.md、install.sh、
+   skills/edd-loop/SKILL.md 和两个 Agent 配置，确认安装来源与脚本行为。
+3. 首次安装时执行 bash install.sh --user。
+4. 如果检测到已安装的同名 Skill 或 Agent，先检查差异并保留已有配置；
+   对确认属于本仓库的旧版本，可以使用 bash install.sh --user --force
+   自动备份后更新。遇到来源不明的同名配置或冲突时不要擅自覆盖。
+5. 验证以下文件确实存在且内容与仓库版本一致：
+   ~/.claude/skills/edd-loop/SKILL.md
+   ~/.claude/skills/edd-loop/references/protocol.md
+   ~/.claude/agents/edd-developer.md
+   ~/.claude/agents/edd-reviewer.md
+6. 检查 Skill 和 Agent 的 YAML frontmatter 是否完整、有效。
+   如有可用的 Claude Code 命令，可进一步检查 Skill 是否被识别；
+   没有实际执行的检查不得宣称通过。
+7. 安装成功后，清理本次创建的临时目录，不修改无关配置。
+8. 最终报告安装位置、Git commit、已执行的验证、遗留问题，
+   并提示我开启新的 Claude Code 会话后使用 /edd-loop <需求>。
+
+请自主解决可处理的错误并重试；如遇必要的权限确认，正常请求授权，
+不要绕过权限保护或执行未经检查的远程脚本。现在开始实际安装。
+```
+
+> Agent 必须具有访问本机文件系统和执行终端命令的能力。Claude Code 可能仍要求你批准工具调用。安装到磁盘不等于验证了完整双 Agent 运行；建议新开 Claude Code 会话进行一次实际任务验证。
+
+### 手动安装
+
 ```bash
 git clone https://github.com/senwong/edd-loop.git
 cd edd-loop
